@@ -29,12 +29,14 @@
 #### 功能
 
 在终端实现单词抽查，演示图如下：
-<video controls>
 
-  <source src="./asset/video/readmeDemo.mp4" type="video/mp4">
-  您的浏览器不支持video标签。
-</video>
+![演示视频](./asset/video/readmeDemo.gif)
+
 同时有，错误的权重设置，此略。
+
+#### 需要的库
+
+- openai
 
 #### 待实现的功能
 
