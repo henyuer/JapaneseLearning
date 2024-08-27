@@ -31,8 +31,8 @@
 在终端实现单词抽查，演示图如下：
 <video controls>
 
-<source src="./asset/video/readmeDemo.mp4" type="video/mp4">
-您的浏览器不支持video标签。
+  <source src="./asset/video/readmeDemo.mp4" type="video/mp4">
+  您的浏览器不支持video标签。
 </video>
 同时有，错误的权重设置，此略。
 
