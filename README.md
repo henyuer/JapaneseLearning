@@ -32,7 +32,7 @@
 
 <!-- ![演示视频](./asset/video/readmeDemo.gif) -->
 
-<img src="./asset/video/readmeDemo.gif" alt="演示动画" width="600"/>
+<img src="./asset/video/readmeDemo.gif" alt="演示动画" width="450"/>
 
 同时有，错误的权重设置，此略。
 
