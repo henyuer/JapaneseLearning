@@ -7,8 +7,19 @@ import glob
 import json
 
 
+def text_color(text,color):
+    if color=='red':
+        return f"\033[31m{text}\033[0m"
+    elif color=='green':
+        return f"\033[32m{text}\033[0m"
+    elif color=='yellow':
+        return f"\033[33m{text}\033[0m"
+    elif color=='blue':
+        return f"\033[34m{text}\033[0m"
+    else:
+        return text
 
-def main(file=None,reset=False):
+def main(file=None,reset=False,pseudonym='h'):
     # if file is None
     # assign file with the newest json file in ./wordLists
     if file is None:
@@ -36,38 +47,52 @@ def main(file=None,reset=False):
 
     wrong_vocab={}
     
-    print("平假名单词复习")
+    if pseudonym=='h':
+        print(text_color("平假名单词复习",'green'))
+    elif pseudonym=='k':
+        print(text_color("片假名单词复习",'green'))
+    else:
+        print(text_color("参数错误！",'red'))
+        print(text_color("-p参数只能为h或k,默认为h",'green'))
+        return
 
     # logic loop
     try:
         for idx in seq :
             chinese,dict_item=vocab_list[idx]
-            japanese,w=list(dict_item.items())[0]
-            w=3 if reset else w
+            if pseudonym=='h':
+                japanese,w=list(dict_item.items())[0]
+            else:
+                try:
+                    japanese,w=list(dict_item.items())[1]
+                # if hiragana is same with katakana, it will be out of index.
+                except IndexError:
+                    japanese,w=list(dict_item.items())[0]
+            w=2 if reset else w
             if w==0:
                 continue
-            total+=1
             chinese_output=chinese+":"
             user_iniput=input(f"\033[33m{chinese_output:<{fixed_length}}\033[0m")
             if japanese==user_iniput:
                 correct+=1
                 vocab[chinese][japanese]-=1
-                print("\033[34myou are right!\033[0m")
+                print(text_color("you are right!",'blue'))
             else:
                 vocab[chinese][japanese]+=2
-                print("\033[31myou are wrong!\033[0m")
+                print(text_color(f"wrong! the answer is {japanese}",'red'))
                 wrong_vocab[chinese]=japanese
+            total+=1
     except KeyboardInterrupt:
-        print("\n\033[31m单词复习中断！\033[0m")
+        print(f"\n{text_color('单词复习中断！','red')}")
 
 
     # print result
     print(f"total word number: {total}, correct number: {correct}")
-    print(f"correct rate: {correct/total*100}%")
+    print("correct rate:" + text_color(f"{correct/total*100}%",'green'))
     print(f"\nwrong words in this test are as follow:")
     for ch,ja in wrong_vocab.items():
         sentence=": "+ja
-        print(f"  \033[032m{ch:<{10}}{sentence}\033[0m")
+        print(text_color(f"  {ch:<{10}}{sentence}",'green'))
 
     # change weights to json file
     with open(file,'w',encoding='utf-8') as f:
@@ -77,6 +102,7 @@ if __name__=="__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument('-f','--file',type=str,help="单词表路径")
     parser.add_argument('-r','--reset',action='store_true',help="重置单词权重")
+    parser.add_argument('-p','--pseudonym',type=str,default='h',help="设置单词表的假名类型，h为平假名，k为片假名")
 
     args=parser.parse_args()
-    main(file=args.file,reset=args.reset)
+    main(file=args.file,reset=args.reset,pseudonym=args.pseudonym)
